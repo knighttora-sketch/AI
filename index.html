@@ -1,308 +1,283 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Claude AI Chat Interface</title>
+    <title>Claude Opus (Tokies)</title>
     <style>
-        :root {
-            --bg-color: #d9d2e9; /* Warna khas Claude lebih terang */
-            --chat-bg: #f7f7f8;
-            --user-msg-bg: #e0e0e0;
-            --text-color: #333333;
-            --input-bg: #ffffff;
-            --border-color: #ccc;
-            --accent-color: #cc785c; /* Aksen Oranye/Coklat Claude */
-            --accent-hover: #b06248;
+        body { 
+            background-color: #1a1a1a; 
+            color: #e0e0e0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100vh; 
+            margin: 0; 
         }
 
-        /* Dark mode support via media query */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #1a1a1a;
-                --chat-bg: #2d2d2d;
-                --user-msg-bg: #3d3d3d;
-                --text-color: #e0e0e0;
-                --input-bg: #404040;
-                --border-color: #555;
-            }
+        /* HEADER / CONFIG */
+        #config-bar {
+            background-color: #2d2d2d;
+            padding: 15px;
+            border-bottom: 1px solid #444;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; height: 100vh; }
-
-        /* Header */
-        header {
-            background-color: var(--chat-bg);
-            padding: 10px 20px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .api-container { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
+        .input-group { display: flex; flex-direction: column; }
+        label { font-size: 0.75rem; color: #aaa; margin-bottom: 4px; }
         
-        input[type="password"] {
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 12px;
-            border-radius: 4px;
-            flex-grow: 1;
-            max-width: 400px;
-        }
-
-        button {
-            background-color: var(--accent-color);
+        input, select {
+            background-color: #383838;
+            border: 1px solid #555;
             color: white;
-            border: none;
-            padding: 8px 16px;
+            padding: 8px;
             border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
+            font-size: 0.9rem;
         }
-        button:hover { background-color: var(--accent-hover); }
-
-        /* Chat Area */
-        #chat-container { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; padding-bottom: 20px; }
         
-        .message {
-            padding: 24px;
+        input:focus { outline: 1px solid #d97757; }
+
+        /* CHAT AREA */
+        #chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
             display: flex;
+            flex-direction: column;
             gap: 20px;
-            line-height: 1.6;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
-        .message.ai { background-color: var(--chat-bg); }
-        .message.user { background-color: var(--user-msg-bg); }
+        .message {
+            display: flex;
+            gap: 15px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+            animation: fadeIn 0.3s ease;
+        }
 
         .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
+            width: 32px; height: 32px;
+            border-radius: 4px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 14px;
             flex-shrink: 0;
-            font-weight: bold;
-            color: white;
         }
 
-        .avatar.ai { background-color: #D97757; } /* Warna Claude */
-        .avatar.user { background-color: #5436DA; }
+        .avatar.ai { background-color: #d97757; color: white; }
+        .avatar.user { background-color: #5436da; color: white; }
 
-        .content { flex-grow: 1; overflow-wrap: break-word; max-width: 800px; }
+        .content {
+            line-height: 1.6;
+            font-size: 1rem;
+            overflow-wrap: break-word;
+        }
+
+        .message.user { flex-direction: row-reverse; }
+        .message.user .content { 
+            background-color: #3d3d3d; 
+            padding: 10px 15px; 
+            border-radius: 12px;
+            border-top-right-radius: 2px;
+        }
         
-        pre { 
-            background: #2d2d2d; 
-            color: #ccc; 
-            padding: 10px; 
-            border-radius: 6px; 
-            overflow-x: auto; 
-            margin-top: 10px;
-            font-family: monospace;
+        .message.ai .content {
+            padding-top: 5px; /* Align avatar with text */
         }
-        code { font-family: monospace; }
 
-        /* Input Area */
-        .input-area {
-            background-color: var(--bg-color);
+        pre { background: #111; padding: 15px; border-radius: 6px; overflow-x: auto; margin-top: 10px; border: 1px solid #333; }
+        code { font-family: 'Courier New', monospace; color: #ccc; }
+
+        /* INPUT AREA */
+        #input-area {
+            background-color: #1a1a1a;
             padding: 20px;
             display: flex;
             justify-content: center;
         }
 
-        .input-wrapper {
+        .input-box {
             position: relative;
             width: 100%;
-            max-width: 800px;
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
+            max-width: 900px;
+            background-color: #383838;
             border-radius: 12px;
-            padding: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #555;
             display: flex;
-            flex-direction: column;
+            align-items: flex-end;
+            padding: 10px;
         }
+
+        .input-box:focus-within { border-color: #777; }
 
         textarea {
             width: 100%;
             background: transparent;
             border: none;
-            color: var(--text-color);
+            color: white;
             resize: none;
             max-height: 200px;
+            padding: 5px;
             outline: none;
-            font-size: 1rem;
+            font-family: inherit;
             line-height: 1.5;
         }
 
-        .send-row {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 5px;
+        button.send-btn {
+            background-color: #d97757;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background 0.2s;
         }
+        button.send-btn:hover { background-color: #b86245; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="api-container">
-            <label for="api-key">Anthropic API Key:</label>
-            <input type="password" id="api-key" placeholder="sk-ant-...">
-            <button onclick="saveApiKey()">Simpan Key</button>
-            <span id="status" style="margin-left:10px; font-size: 0.9em;"></span>
+    <div id="config-bar">
+        <div class="input-group">
+            <label>Base URL (Tokies)</label>
+            <input type="text" id="base-url" value="https://api.tokies.lol/anthropic">
         </div>
-        <strong>Claude Web Client</strong>
-    </header>
+        <div class="input-group">
+            <label>API Key</label>
+            <!-- Key pre-filled based on your request -->
+            <input type="password" id="api-key" value="sk-ant-api03-66PvcUF5zHhwnbLa28hiL5tONUVXKlcdHENk09fPFZYyGjFgMCAAWFWTvEADLrx2QnVzcJPNiTLYuGXFCE4B-iMiGw7k_AA">
+        </div>
+        <div class="input-group">
+            <label>Model</label>
+            <select id="model-select">
+                <option value="claude-opus-4-8" selected>Claude Opus 4.8 (Fastest/Smartest)</option>
+                <option value="claude-sonnet-4-6">Claude Sonnet 4.6</option>
+                <option value="claude-haiku-4-5">Claude Haiku 4.5 (Cheapest)</option>
+            </select>
+        </div>
+        <div class="input-group" style="justify-content: flex-end;">
+            <button onclick="clearChat()" style="background:#444; margin-top:18px;">Clear Chat</button>
+        </div>
+    </div>
 
     <div id="chat-container">
         <div class="message ai">
             <div class="avatar ai">C</div>
-            <div class="content">Halo! Saya Claude. Pastikan kamu memasukkan API Key <code>sk-ant-...</code> di atas agar saya bisa merespons.</div>
+            <div class="content">
+                Hello! I am connected via <b>Tokies.lol</b> using the <b>Claude Opus 4.8</b> model. How can I help you today?
+            </div>
         </div>
     </div>
 
-    <div class="input-area">
-        <div class="input-wrapper">
-            <textarea id="user-input" rows="1" placeholder="Tulis pesan kepada Claude..." oninput="autoResize(this)"></textarea>
-            <div class="send-row">
-                <button id="send-btn" onclick="sendMessage()">Kirim</button>
-            </div>
+    <div id="input-area">
+        <div class="input-box">
+            <textarea id="user-input" rows="1" placeholder="Send a message to Claude..." oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+            <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 
     <script>
         const chatContainer = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
-        const apiKeyInput = document.getElementById('api-key');
-        const statusMsg = document.getElementById('status');
-        let messageHistory = [];
-
-        // Load Key
-        window.onload = () => {
-            const savedKey = localStorage.getItem('anthropic_api_key');
-            if (savedKey) {
-                apiKeyInput.value = savedKey;
-                statusMsg.textContent = "Key tersimpan.";
-                statusMsg.style.color = "green";
-            }
-        };
-
-        function saveApiKey() {
-            const key = apiKeyInput.value.trim();
-            if (key.startsWith('sk-ant-')) {
-                localStorage.setItem('anthropic_api_key', key);
-                statusMsg.textContent = "Key berhasil disimpan!";
-                statusMsg.style.color = "green";
-            } else {
-                statusMsg.textContent = "Format key harus sk-ant-...";
-                statusMsg.style.color = "red";
-            }
-        }
-
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = textarea.scrollHeight + 'px';
-            if(textarea.value === '') textarea.style.height = 'auto';
-        }
+        let messages = []; // Store conversation history
 
         function appendMessage(role, text) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `message ${role}`;
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
             
-            const avatarDiv = document.createElement('div');
-            avatarDiv.className = `avatar ${role}`;
-            avatarDiv.innerText = role === 'user' ? 'U' : 'C';
+            const avatar = document.createElement('div');
+            avatar.className = `avatar ${role}`;
+            avatar.innerText = role === 'user' ? 'U' : 'C';
 
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'content';
+            const content = document.createElement('div');
+            content.className = 'content';
             
             // Simple formatting
-            let formattedText = text
+            let formatted = text
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
                 .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
                 .replace(/\n/g, '<br>');
+            
+            content.innerHTML = formatted;
 
-            contentDiv.innerHTML = formattedText;
-
-            msgDiv.appendChild(avatarDiv);
-            msgDiv.appendChild(contentDiv);
-            chatContainer.appendChild(msgDiv);
+            div.appendChild(avatar);
+            div.appendChild(content);
+            chatContainer.appendChild(div);
             chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function clearChat() {
+            messages = [];
+            chatContainer.innerHTML = '';
+            appendMessage('ai', 'Chat history cleared. Ready for a new topic.');
         }
 
         async function sendMessage() {
             const text = userInput.value.trim();
-            const apiKey = localStorage.getItem('anthropic_api_key');
+            const baseUrl = document.getElementById('base-url').value.replace(/\/$/, ''); // Remove trailing slash
+            const apiKey = document.getElementById('api-key').value;
+            const model = document.getElementById('model-select').value;
 
             if (!text) return;
-            if (!apiKey) {
-                alert("Mohon masukkan API Key Anthropic (sk-ant-...)");
-                apiKeyInput.focus();
-                return;
-            }
+            if (!apiKey) return alert("Please enter API Key");
 
+            // UI Update
             userInput.value = '';
             userInput.style.height = 'auto';
-            sendBtn.disabled = true;
-            
             appendMessage('user', text);
-            
-            // Anthropic expects messages in a specific format
-            messageHistory.push({ role: "user", content: text });
+            messages.push({ role: "user", content: text });
 
-            // Loading UI
+            // Loading Indicator
             const loadingDiv = document.createElement('div');
             loadingDiv.className = 'message ai';
-            loadingDiv.innerHTML = `<div class="avatar ai">C</div><div class="content">Sedang mengetik...</div>`;
+            loadingDiv.innerHTML = `<div class="avatar ai">C</div><div class="content">Thinking...</div>`;
             chatContainer.appendChild(loadingDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             try {
-                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                // NOTE: Tokies acts as a proxy. We send standard Anthropic format,
+                // but the URL points to Tokies.
+                const response = await fetch(`${baseUrl}/v1/messages`, {
                     method: 'POST',
                     headers: {
                         'x-api-key': apiKey,
                         'anthropic-version': '2023-06-01',
                         'content-type': 'application/json',
-                        'dangerously-allow-browser': 'true' // Diperlukan untuk pemanggilan dari browser
+                        'dangerously-allow-browser': 'true'
                     },
                     body: JSON.stringify({
-                        model: "claude-3-sonnet-20240229", // Model Claude 3
-                        max_tokens: 1024,
-                        messages: messageHistory
+                        model: model,
+                        max_tokens: 4096,
+                        messages: messages
                     })
                 });
 
                 const data = await response.json();
                 chatContainer.removeChild(loadingDiv);
 
-                if (response.ok) {
-                    const aiReply = data.content[0].text;
-                    messageHistory.push({ role: "assistant", content: aiReply });
-                    appendMessage('ai', aiReply);
+                if (response.ok && data.content) {
+                    const reply = data.content[0].text;
+                    messages.push({ role: "assistant", content: reply });
+                    appendMessage('ai', reply);
                 } else {
-                    const errorMsg = data.error?.message || JSON.stringify(data);
-                    appendMessage('ai', `Error (${response.status}): ${errorMsg}`);
+                    console.error(data);
+                    appendMessage('ai', `<span style="color:#ff6b6b">Error: ${data.error?.message || JSON.stringify(data)}</span>`);
                 }
 
             } catch (error) {
                 chatContainer.removeChild(loadingDiv);
-                appendMessage('ai', `Error Jaringan: Gagal terhubung ke server Anthropic. Cek koneksi internetmu.`);
+                appendMessage('ai', `<span style="color:#ff6b6b">Network Error: ${error.message}<br>Check if the Base URL is correct.</span>`);
                 console.error(error);
-            } finally {
-                sendBtn.disabled = false;
-                userInput.focus();
             }
         }
 
+        // Enter key to send
         userInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
