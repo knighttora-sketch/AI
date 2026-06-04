@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Account Manager - FIXED</title>
+    <title>Roblox Manager - Force Valid</title>
     <style>
         :root {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
             --text-main: #e0e0e0;
             --text-muted: #a0a0a0;
-            --primary: #00a8ff;
+            --primary: #9b59b6; /* Purple theme for force mode */
             --success: #2ecc71;
             --error: #e74c3c;
             --warning: #f1c40f;
@@ -33,13 +33,52 @@
         .panel.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        input[type="text"], textarea { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid var(--border); border-radius: 8px; color: #fff; margin-bottom: 10px; font-family: monospace;}
-        
-        .btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff; background: var(--primary); }
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #555;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        textarea { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid var(--border); border-radius: 8px; color: #fff; margin-bottom: 10px; font-family: monospace; }
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff; background: var(--primary); width: 100%; }
         .btn:hover { opacity: 0.9; }
         
         .file-upload { border: 2px dashed var(--border); padding: 20px; text-align: center; border-radius: 8px; cursor: pointer; }
-        .file-upload:hover { border-color: var(--primary); background: rgba(0,168,255,0.05); }
+        .file-upload:hover { border-color: var(--primary); background: rgba(155, 89, 182, 0.05); }
 
         .results-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
         .account-card { background: #252525; padding: 15px; border-radius: 8px; border-left: 4px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
@@ -49,7 +88,7 @@
         .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
         .status-badge.valid { background: rgba(46, 204, 113, 0.2); color: var(--success); }
         .status-badge.invalid { background: rgba(231, 76, 60, 0.2); color: var(--error); }
-        .status-badge.checking { background: rgba(241, 196, 15, 0.2); color: var(--warning); }
+        .status-badge.force-valid { background: rgba(155, 89, 182, 0.2); color: var(--primary); }
 
         #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 24px; border-radius: 8px; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         #toast.show { opacity: 1; bottom: 40px; }
@@ -59,8 +98,8 @@
 
 <div class="container">
     <header>
-        <h1>🤖 Roblox Manager (Fixed)</h1>
-        <div class="subtitle">Auto-clean WARNING tags | Proxy Support</div>
+        <h1>🚀 Roblox Manager</h1>
+        <div class="subtitle">Force Valid Mode • No Server Check</div>
     </header>
 
     <nav class="tabs">
@@ -71,6 +110,17 @@
 
     <!-- TAB 1: SCAN -->
     <div id="tab-scan" class="panel active">
+        <div class="toggle-container">
+            <span>⚡ <strong>Skip Validation (Force Valid)</strong></span>
+            <label class="switch">
+                <input type="checkbox" id="force-valid" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+            If enabled, the tool <strong>will not contact Roblox</strong>. It will clean WARNING tags and assume cookies are valid. Use this if the checker fails due to browser security.
+        </p>
+
         <label>Select Cookies.txt</label>
         <div class="file-upload" onclick="document.getElementById('fileInput').click()">
             <p>Click to Select File</p>
@@ -81,16 +131,23 @@
 
     <!-- TAB 2: MANUAL -->
     <div id="tab-manual" class="panel">
+        <div class="toggle-container">
+            <span>⚡ Skip Validation</span>
+            <label class="switch">
+                <input type="checkbox" id="force-valid-manual" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
         <label>Cookie</label>
         <textarea id="manual-cookie" rows="5" placeholder="Paste full cookie string including WARNING tags..."></textarea>
-        <button class="btn" onclick="checkManual()">Check Cookie</button>
+        <button class="btn" onclick="checkManual()">Process Cookie</button>
     </div>
 
     <!-- TAB 3: RESULTS -->
     <div id="tab-results" class="panel">
         <div style="display:flex; justify-content:space-between;">
             <h3>Results</h3>
-            <button class="btn" style="background:#444; font-size:0.8rem;" onclick="exportData()">Download JSON</button>
+            <button class="btn" style="background:#444; font-size:0.8rem; width:auto;" onclick="exportData()">Download JSON</button>
         </div>
         <div class="results-list" id="accounts-list"></div>
     </div>
@@ -100,12 +157,6 @@
 
 <script>
     let accounts = [];
-
-    // --- PROXY LIST (Fallbacks) ---
-    const PROXIES = [
-        "https://corsproxy.io/?",
-        "https://api.allorigins.win/raw?url="
-    ];
 
     function switchTab(id) {
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -121,9 +172,8 @@
         setTimeout(() => t.classList.remove('show'), 3000);
     }
 
-    // --- COOKIE CLEANER (FIXES THE WARNING ERROR) ---
+    // --- COOKIE CLEANER ---
     function cleanCookie(value) {
-        // Remove WARNING prefix exactly like the Python script
         if (value.includes('WARNING')) {
             return value.split('|_|WARNING')[0].trim();
         }
@@ -139,7 +189,6 @@
             line = line.trim();
             if (!line || (line.startsWith('#') && !line.startsWith('#HttpOnly'))) return;
 
-            // Handle #HttpOnly prefix
             let processedLine = line;
             if (line.startsWith('#HttpOnly')) processedLine = line.substring(9);
 
@@ -148,10 +197,8 @@
             if (parts.length === 7) {
                 const [domain, includeSubdomains, path, isSecure, expiry, name, value] = parts;
 
-                // Check for the cookie name
                 if (name === '.ROBLOSECURITY') {
                     const cleanedValue = cleanCookie(value);
-                    
                     if (cleanedValue.length > 50) {
                         cookies.push({
                             domain: domain,
@@ -165,32 +212,41 @@
         return cookies;
     }
 
-    // --- VALIDATOR WITH PROXY FALLBACK ---
+    // --- MOCK VALIDATOR (For Force Mode) ---
+    function mockValidation(cookie) {
+        // Extract ID if possible from cookie (heuristic) or just return generic
+        return {
+            valid: true,
+            data: {
+                id: "0000000000", // Placeholder since we aren't checking
+                name: "Unknown (Force Valid)",
+                displayName: "Valid Cookie"
+            }
+        };
+    }
+
+    // --- REAL VALIDATOR ---
     async function validateCookie(cookie) {
+        const PROXIES = [
+            "https://corsproxy.io/?",
+            "https://api.allorigins.win/raw?url="
+        ];
         const targetUrl = "https://users.roblox.com/v1/users/authenticated";
         
-        // Try proxies sequentially
         for (const proxy of PROXIES) {
             try {
                 const finalUrl = proxy + encodeURIComponent(targetUrl);
-                
                 const response = await fetch(finalUrl, {
                     method: 'GET',
-                    headers: {
-                        'Cookie': `.ROBLOSECURITY=${cookie}`
-                    }
+                    headers: { 'Cookie': `.ROBLOSECURITY=${cookie}` }
                 });
 
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.id) return { valid: true, data: data };
                 }
-            } catch (e) {
-                console.log(`Proxy ${proxy} failed, trying next...`);
-                continue; // Try next proxy
-            }
+            } catch (e) { continue; }
         }
-
         return { valid: false, data: null };
     }
 
@@ -198,6 +254,8 @@
     async function handleFileUpload(input) {
         const file = input.files[0];
         if (!file) return;
+
+        const forceValid = document.getElementById('force-valid').checked;
 
         const reader = new FileReader();
         reader.onload = async (e) => {
@@ -212,11 +270,17 @@
             }
 
             for (const c of cookies) {
-                // Add to list as checking
-                addAccountToList({ username: "Checking...", displayName: "Scanning", userId: "???", cookie: c.value, status: 'checking', domain: c.domain });
+                addAccountToList({ username: "Processing...", displayName: "Scanning", userId: "???", cookie: c.value, status: 'checking', domain: c.domain });
                 
-                // Validate
-                const result = await validateCookie(c.value);
+                let result;
+                if (forceValid) {
+                    result = mockValidation(c.value);
+                    // Simulate tiny delay for UI
+                    await new Promise(r => setTimeout(r, 100)); 
+                } else {
+                    result = await validateCookie(c.value);
+                    await new Promise(r => setTimeout(r, 800));
+                }
                 
                 if (result.valid) {
                     updateLastAccount({ 
@@ -224,7 +288,7 @@
                         displayName: result.data.displayName, 
                         userId: result.data.id, 
                         cookie: c.value, 
-                        status: 'valid', 
+                        status: forceValid ? 'force-valid' : 'valid', 
                         domain: c.domain 
                     });
                 } else {
@@ -237,10 +301,8 @@
                         domain: c.domain 
                     });
                 }
-                // Small delay
-                await new Promise(r => setTimeout(r, 800)); 
             }
-            showToast("Scan Complete!");
+            showToast(forceValid ? "Processed (Force Valid)!" : "Scan Complete!");
             switchTab('tab-results');
         };
         reader.readAsText(file);
@@ -250,16 +312,21 @@
     async function checkManual() {
         let cookie = document.getElementById('manual-cookie').value.trim();
         if (!cookie) return showToast("Enter a cookie");
-
-        // Clean the manual entry too
-        cookie = cleanCookie(cookie);
-
-        addAccountToList({ username: "Manual", displayName: "Validating...", userId: "...", cookie: cookie, status: 'checking', domain: "Manual" });
         
-        const result = await validateCookie(cookie);
+        cookie = cleanCookie(cookie);
+        const forceValid = document.getElementById('force-valid-manual').checked;
+
+        addAccountToList({ username: "Manual", displayName: "Processing...", userId: "...", cookie: cookie, status: 'checking', domain: "Manual" });
+        
+        let result;
+        if (forceValid) {
+            result = mockValidation(cookie);
+        } else {
+            result = await validateCookie(cookie);
+        }
         
         if (result.valid) {
-            updateLastAccount({ username: result.data.name, displayName: result.data.displayName, userId: result.data.id, cookie: cookie, status: 'valid', domain: "Manual" });
+            updateLastAccount({ username: result.data.name, displayName: result.data.displayName, userId: result.data.id, cookie: cookie, status: forceValid ? 'force-valid' : 'valid', domain: "Manual" });
         } else {
             updateLastAccount({ username: "Unknown", displayName: "Invalid", userId: "N/A", cookie: cookie, status: 'invalid', domain: "Manual" });
         }
@@ -285,14 +352,18 @@
         [...accounts].reverse().forEach(acc => {
             const div = document.createElement('div');
             div.className = `account-card ${acc.status}`;
+            
+            let badgeText = acc.status.toUpperCase();
+            if(acc.status === 'force-valid') badgeText = 'VALID (SKIPPED CHECK)';
+
             div.innerHTML = `
                 <div>
                     <strong style="color:var(--text-main)">${acc.displayName}</strong> 
                     <span style="font-size:0.8em; color:var(--text-muted)">(${acc.username})</span>
                     <div style="font-size:0.75em; color:#666; margin-top:4px;">ID: ${acc.userId} | Domain: ${acc.domain}</div>
-                    <div style="font-size:0.7em; color:#444; font-family:monospace;">${acc.cookie.substring(0, 25)}...</div>
+                    <div style="font-size:0.7em; color:#444; font-family:monospace;">${acc.cookie.substring(0, 30)}...</div>
                 </div>
-                <div class="status-badge ${acc.status}">${acc.status.toUpperCase()}</div>
+                <div class="status-badge ${acc.status}">${badgeText}</div>
             `;
             list.appendChild(div);
         });
