@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Account Manager - Web Edition</title>
+    <title>Roblox Account Manager - FIXED</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -17,513 +17,251 @@
             --border: #333;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* Header */
-        header {
-            text-align: center;
-            padding: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
-        h1 {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 5px;
-            gap: 5px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 12px;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.3s;
-            font-weight: 600;
-        }
-
-        .tab-btn.active {
-            background: var(--primary);
-            color: #fff;
-        }
-
-        .tab-btn:hover:not(.active) {
-            background: rgba(255,255,255,0.05);
-        }
-
-        /* Panels */
-        .panel {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .panel.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Controls */
-        .control-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-muted);
-        }
-
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 12px;
-            background: #2a2a2a;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: #fff;
-            font-family: monospace;
-        }
-
-        input:focus, textarea:focus {
-            outline: 1px solid var(--primary);
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-primary { background: var(--primary); color: #fff; }
-        .btn-primary:hover { background: #0097e6; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; padding: 20px; }
+        .container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 20px; }
         
-        .btn-success { background: var(--success); color: #fff; }
-        .btn-success:hover { background: #27ae60; }
+        header { text-align: center; padding: 20px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; }
+        h1 { color: var(--primary); margin-bottom: 5px; }
+        .subtitle { color: var(--text-muted); font-size: 0.9rem; }
 
-        .file-upload {
-            border: 2px dashed var(--border);
-            padding: 20px;
-            text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+        .tabs { display: flex; background: var(--card-bg); border-radius: 12px; padding: 5px; gap: 5px; }
+        .tab-btn { flex: 1; padding: 12px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; border-radius: 8px; font-weight: 600; }
+        .tab-btn.active { background: var(--primary); color: #fff; }
+
+        .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: none; animation: fadeIn 0.3s; }
+        .panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        input[type="text"], textarea { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid var(--border); border-radius: 8px; color: #fff; margin-bottom: 10px; font-family: monospace;}
+        
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; color: #fff; background: var(--primary); }
+        .btn:hover { opacity: 0.9; }
+        
+        .file-upload { border: 2px dashed var(--border); padding: 20px; text-align: center; border-radius: 8px; cursor: pointer; }
         .file-upload:hover { border-color: var(--primary); background: rgba(0,168,255,0.05); }
 
-        /* Results Table */
-        .results-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .account-card {
-            background: #252525;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
+        .results-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .account-card { background: #252525; padding: 15px; border-radius: 8px; border-left: 4px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
         .account-card.valid { border-left-color: var(--success); }
         .account-card.invalid { border-left-color: var(--error); }
-        .account-card.checking { border-left-color: var(--warning); }
-
-        .acc-info h3 { font-size: 1rem; margin-bottom: 4px; }
-        .acc-info p { font-size: 0.8rem; color: var(--text-muted); }
-        .cookie-tag { font-family: monospace; background: #333; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
-
-        .status-badge {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
+        
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
         .status-badge.valid { background: rgba(46, 204, 113, 0.2); color: var(--success); }
         .status-badge.invalid { background: rgba(231, 76, 60, 0.2); color: var(--error); }
         .status-badge.checking { background: rgba(241, 196, 15, 0.2); color: var(--warning); }
 
-        /* Toast Notification */
-        #toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            opacity: 0;
-            transition: 0.3s;
-            pointer-events: none;
-            z-index: 1000;
-        }
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 24px; border-radius: 8px; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         #toast.show { opacity: 1; bottom: 40px; }
-
-        /* Settings Toggle */
-        .settings-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>🤖 Roblox Account Manager</h1>
-        <div class="subtitle">Web Edition • Created by Tora • Fazbear Activity</div>
+        <h1>🤖 Roblox Manager (Fixed)</h1>
+        <div class="subtitle">Auto-clean WARNING tags | Proxy Support</div>
     </header>
 
     <nav class="tabs">
-        <button class="tab-btn active" onclick="switchTab('tab-scan')">🔍 Scan Cookies</button>
-        <button class="tab-btn" onclick="switchTab('tab-manual')">🔐 Manual Entry</button>
+        <button class="tab-btn active" onclick="switchTab('tab-scan')">🔍 Scan File</button>
+        <button class="tab-btn" onclick="switchTab('tab-manual')">🔐 Manual</button>
         <button class="tab-btn" onclick="switchTab('tab-results')">📊 Results</button>
-        <button class="tab-btn" onclick="switchTab('tab-settings')">⚙️ Settings</button>
     </nav>
 
-    <!-- TAB 1: SCAN COOKIES -->
+    <!-- TAB 1: SCAN -->
     <div id="tab-scan" class="panel active">
-        <div class="control-group">
-            <label>Select Cookies.txt file (Netscape Format)</label>
-            <div class="file-upload" onclick="document.getElementById('fileInput').click()">
-                <p>Click here to select <strong>cookies.txt</strong></p>
-                <input type="file" id="fileInput" accept=".txt" hidden onchange="handleFileUpload(this)">
-            </div>
-            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--warning);">
-                ⚠️ Web browsers cannot scan your phone storage automatically due to security.
-                Please select the file manually.
-            </p>
+        <label>Select Cookies.txt</label>
+        <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+            <p>Click to Select File</p>
+            <input type="file" id="fileInput" accept=".txt" hidden onchange="handleFileUpload(this)">
         </div>
-        
-        <div id="scan-progress" style="display: none;">
-            <p>Scanning file... <span id="scan-count">0</span> cookies found.</p>
-        </div>
+        <div id="scan-status" style="margin-top: 10px; color: var(--text-muted);"></div>
     </div>
 
-    <!-- TAB 2: MANUAL ENTRY -->
+    <!-- TAB 2: MANUAL -->
     <div id="tab-manual" class="panel">
-        <div class="control-group">
-            <label>Username</label>
-            <input type="text" id="manual-user" placeholder="e.g. RobloDev">
-        </div>
-        <div class="control-group">
-            <label>.ROBLOSECURITY Cookie</label>
-            <textarea id="manual-cookie" rows="4" placeholder="Paste cookie here... (WARNING_|_...)"></textarea>
-        </div>
-        <button class="btn btn-primary" onclick="addManualAccount()">Check & Add Account</button>
+        <label>Cookie</label>
+        <textarea id="manual-cookie" rows="5" placeholder="Paste full cookie string including WARNING tags..."></textarea>
+        <button class="btn" onclick="checkManual()">Check Cookie</button>
     </div>
 
     <!-- TAB 3: RESULTS -->
     <div id="tab-results" class="panel">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3>Stored Accounts (<span id="total-count">0</span>)</h3>
-            <button class="btn btn-success" onclick="exportData()" style="font-size: 0.8rem;">💾 Export JSON</button>
+        <div style="display:flex; justify-content:space-between;">
+            <h3>Results</h3>
+            <button class="btn" style="background:#444; font-size:0.8rem;" onclick="exportData()">Download JSON</button>
         </div>
-        <div class="results-list" id="accounts-list">
-            <!-- Accounts will appear here -->
-            <p style="text-align: center; color: var(--text-muted); padding: 20px;">No accounts found yet.</p>
-        </div>
-    </div>
-
-    <!-- TAB 4: SETTINGS -->
-    <div id="tab-settings" class="panel">
-        <h3>Configuration</h3>
-        <br>
-        <div class="settings-row">
-            <span>Use CORS Proxy (Recommended for validation)</span>
-            <input type="checkbox" id="use-proxy" checked>
-        </div>
-        <div class="settings-row">
-            <span>Proxy URL</span>
-            <input type="text" id="proxy-url" value="https://corsproxy.io/?" style="width: 60%;">
-        </div>
-        <p style="font-size: 0.8rem; color: var(--text-muted);">
-            Direct requests to Roblox from a browser often fail due to CORS. Using a proxy helps validate the cookies.
-        </p>
-        <br>
-        <button class="btn btn-primary" onclick="clearAllData()">❌ Clear All Data</button>
+        <div class="results-list" id="accounts-list"></div>
     </div>
 </div>
 
 <div id="toast">Message</div>
 
 <script>
-    // --- STATE MANAGEMENT ---
     let accounts = [];
 
-    // --- TAB LOGIC ---
-    function switchTab(tabId) {
+    // --- PROXY LIST (Fallbacks) ---
+    const PROXIES = [
+        "https://corsproxy.io/?",
+        "https://api.allorigins.win/raw?url="
+    ];
+
+    function switchTab(id) {
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        
-        document.getElementById(tabId).classList.add('active');
-        // Find button that calls this function
-        const buttons = document.querySelectorAll('.tab-btn');
-        if(tabId === 'tab-scan') buttons[0].classList.add('active');
-        if(tabId === 'tab-manual') buttons[1].classList.add('active');
-        if(tabId === 'tab-results') {
-            buttons[2].classList.add('active');
-            renderAccounts();
-        }
-        if(tabId === 'tab-settings') buttons[3].classList.add('active');
+        document.getElementById(id).classList.add('active');
+        if(id === 'tab-results') renderAccounts();
     }
 
     function showToast(msg) {
-        const toast = document.getElementById('toast');
-        toast.textContent = msg;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3000);
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
     }
 
-    // --- COOKIE PARSING LOGIC (Converted from Python) ---
-    function extractRobloxCookies(content) {
+    // --- COOKIE CLEANER (FIXES THE WARNING ERROR) ---
+    function cleanCookie(value) {
+        // Remove WARNING prefix exactly like the Python script
+        if (value.includes('WARNING')) {
+            return value.split('|_|WARNING')[0].trim();
+        }
+        return value.trim();
+    }
+
+    // --- PARSER ---
+    function parseCookies(content) {
         const lines = content.split('\n');
-        const foundCookies = [];
+        const cookies = [];
 
         lines.forEach((line, index) => {
             line = line.trim();
-            
-            // Skip empty/comments (unless it's #HttpOnly)
             if (!line || (line.startsWith('#') && !line.startsWith('#HttpOnly'))) return;
 
             // Handle #HttpOnly prefix
             let processedLine = line;
-            if (line.startsWith('#HttpOnly')) {
-                processedLine = line.substring(9);
-            }
+            if (line.startsWith('#HttpOnly')) processedLine = line.substring(9);
 
             const parts = processedLine.split('\t');
 
-            // Standard Netscape cookie format has 7 fields
             if (parts.length === 7) {
                 const [domain, includeSubdomains, path, isSecure, expiry, name, value] = parts;
 
+                // Check for the cookie name
                 if (name === '.ROBLOSECURITY') {
-                    // Clean WARNING prefix
-                    let cleanValue = value;
-                    if (cleanValue.includes('WARNING')) {
-                        cleanValue = cleanValue.split('|_|WARNING')[0].strip();
-                    }
-
-                    if (cleanValue.length > 100) {
-                        foundCookies.push({
-                            domain,
-                            value: cleanValue,
+                    const cleanedValue = cleanCookie(value);
+                    
+                    if (cleanedValue.length > 50) {
+                        cookies.push({
+                            domain: domain,
+                            value: cleanedValue,
                             line: index + 1
                         });
                     }
                 }
             }
         });
-
-        return foundCookies;
+        return cookies;
     }
 
-    // --- VALIDATION LOGIC ---
-    async function checkCookie(cookie) {
-        const useProxy = document.getElementById('use-proxy').checked;
-        const proxyUrl = document.getElementById('proxy-url').value;
+    // --- VALIDATOR WITH PROXY FALLBACK ---
+    async function validateCookie(cookie) {
+        const targetUrl = "https://users.roblox.com/v1/users/authenticated";
         
-        let url = "https://users.roblox.com/v1/users/authenticated";
-        
-        // Add proxy if enabled
-        if (useProxy) {
-            url = proxyUrl + encodeURIComponent(url);
-        }
+        // Try proxies sequentially
+        for (const proxy of PROXIES) {
+            try {
+                const finalUrl = proxy + encodeURIComponent(targetUrl);
+                
+                const response = await fetch(finalUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Cookie': `.ROBLOSECURITY=${cookie}`
+                    }
+                });
 
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Cookie': `.ROBLOSECURITY=${cookie}`
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.id) return { valid: true, data: data };
                 }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                if (data && data.id) {
-                    return { valid: true, data: data };
-                }
+            } catch (e) {
+                console.log(`Proxy ${proxy} failed, trying next...`);
+                continue; // Try next proxy
             }
-        } catch (error) {
-            console.error("Validation error:", error);
-            // If proxy fails, we might get an error, but we shouldn't crash
         }
 
         return { valid: false, data: null };
     }
 
     // --- FILE HANDLING ---
-    function handleFileUpload(input) {
+    async function handleFileUpload(input) {
         const file = input.files[0];
         if (!file) return;
 
         const reader = new FileReader();
         reader.onload = async (e) => {
             const content = e.target.result;
-            const cookies = extractRobloxCookies(content);
-
-            document.getElementById('scan-progress').style.display = 'block';
-            document.getElementById('scan-count').innerText = cookies.length;
+            const cookies = parseCookies(content);
+            
+            document.getElementById('scan-status').textContent = `Found ${cookies.length} cookies. Processing...`;
 
             if (cookies.length === 0) {
-                showToast("No .ROBLOSECURITY cookies found in file.");
+                showToast("No valid cookies found in file.");
                 return;
             }
 
-            showToast(`Found ${cookies.length} cookies. Validating...`);
-
-            // Process cookies one by one
             for (const c of cookies) {
-                // UI Feedback
-                addAccountToList({
-                    username: "Scanning...",
-                    displayName: "Checking...",
-                    userId: "???",
-                    cookie: c.value,
-                    status: 'checking',
-                    domain: c.domain
-                });
-
-                // Actual Check
-                const result = await checkCookie(c.value);
+                // Add to list as checking
+                addAccountToList({ username: "Checking...", displayName: "Scanning", userId: "???", cookie: c.value, status: 'checking', domain: c.domain });
+                
+                // Validate
+                const result = await validateCookie(c.value);
                 
                 if (result.valid) {
-                    updateLastAccount({
-                        username: result.data.name,
-                        displayName: result.data.displayName,
-                        userId: result.data.id,
-                        cookie: c.value,
-                        status: 'valid',
-                        domain: c.domain
+                    updateLastAccount({ 
+                        username: result.data.name, 
+                        displayName: result.data.displayName, 
+                        userId: result.data.id, 
+                        cookie: c.value, 
+                        status: 'valid', 
+                        domain: c.domain 
                     });
                 } else {
-                    updateLastAccount({
-                        username: "Unknown",
-                        displayName: "Invalid Cookie",
-                        userId: "N/A",
-                        cookie: c.value,
-                        status: 'invalid',
-                        domain: c.domain
+                    updateLastAccount({ 
+                        username: "Unknown", 
+                        displayName: "Invalid / Dead", 
+                        userId: "N/A", 
+                        cookie: c.value, 
+                        status: 'invalid', 
+                        domain: c.domain 
                     });
                 }
-                
-                // Small delay to prevent rate limiting UI
-                await new Promise(r => setTimeout(r, 500));
+                // Small delay
+                await new Promise(r => setTimeout(r, 800)); 
             }
-            
             showToast("Scan Complete!");
             switchTab('tab-results');
         };
         reader.readAsText(file);
     }
 
-    // --- MANUAL ENTRY ---
-    async function addManualAccount() {
-        const username = document.getElementById('manual-user').value;
-        const cookie = document.getElementById('manual-cookie').value.trim();
+    // --- MANUAL CHECK ---
+    async function checkManual() {
+        let cookie = document.getElementById('manual-cookie').value.trim();
+        if (!cookie) return showToast("Enter a cookie");
 
-        if (!cookie) {
-            showToast("Please enter a cookie");
-            return;
-        }
+        // Clean the manual entry too
+        cookie = cleanCookie(cookie);
 
-        const tempId = Date.now();
-        addAccountToList({
-            username: username || "Manual Check",
-            displayName: "Validating...",
-            userId: "...",
-            cookie: cookie,
-            status: 'checking',
-            domain: 'Manual'
-        });
-
-        const result = await checkCookie(cookie);
-
+        addAccountToList({ username: "Manual", displayName: "Validating...", userId: "...", cookie: cookie, status: 'checking', domain: "Manual" });
+        
+        const result = await validateCookie(cookie);
+        
         if (result.valid) {
-            updateLastAccount({
-                username: result.data.name,
-                displayName: result.data.displayName,
-                userId: result.data.id,
-                cookie: cookie,
-                status: 'valid',
-                domain: 'Manual'
-            });
+            updateLastAccount({ username: result.data.name, displayName: result.data.displayName, userId: result.data.id, cookie: cookie, status: 'valid', domain: "Manual" });
         } else {
-            updateLastAccount({
-                username: username || "Unknown",
-                displayName: "Invalid Cookie",
-                userId: "N/A",
-                cookie: cookie,
-                status: 'invalid',
-                domain: 'Manual'
-            });
+            updateLastAccount({ username: "Unknown", displayName: "Invalid", userId: "N/A", cookie: cookie, status: 'invalid', domain: "Manual" });
         }
     }
 
@@ -542,31 +280,19 @@
 
     function renderAccounts() {
         const list = document.getElementById('accounts-list');
-        document.getElementById('total-count').innerText = accounts.length;
-        
-        if (accounts.length === 0) {
-            list.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 20px;">No accounts found yet.</p>';
-            return;
-        }
-
         list.innerHTML = '';
-        // Show newest first
+        
         [...accounts].reverse().forEach(acc => {
             const div = document.createElement('div');
             div.className = `account-card ${acc.status}`;
-            
-            let statusText = 'UNKNOWN';
-            if(acc.status === 'valid') statusText = 'VALID';
-            if(acc.status === 'invalid') statusText = 'INVALID';
-            if(acc.status === 'checking') statusText = 'CHECKING...';
-
             div.innerHTML = `
-                <div class="acc-info">
-                    <h3>${acc.displayName || acc.username} <span class="cookie-tag">${acc.domain}</span></h3>
-                    <p>ID: ${acc.userId} | User: ${acc.username}</p>
-                    <p style="margin-top:5px; font-family:monospace; color:#555;">${acc.cookie.substring(0, 20)}...</p>
+                <div>
+                    <strong style="color:var(--text-main)">${acc.displayName}</strong> 
+                    <span style="font-size:0.8em; color:var(--text-muted)">(${acc.username})</span>
+                    <div style="font-size:0.75em; color:#666; margin-top:4px;">ID: ${acc.userId} | Domain: ${acc.domain}</div>
+                    <div style="font-size:0.7em; color:#444; font-family:monospace;">${acc.cookie.substring(0, 25)}...</div>
                 </div>
-                <div class="status-badge ${acc.status}">${statusText}</div>
+                <div class="status-badge ${acc.status}">${acc.status.toUpperCase()}</div>
             `;
             list.appendChild(div);
         });
@@ -574,28 +300,10 @@
 
     function exportData() {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(accounts, null, 2));
-        const downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "roblox_accounts.json");
-        document.body.appendChild(downloadAnchorNode);
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
-        showToast("Results downloaded!");
-    }
-
-    function clearAllData() {
-        if(confirm("Are you sure you want to clear all results?")) {
-            accounts = [];
-            renderAccounts();
-            showToast("Data cleared.");
-        }
-    }
-
-    // Polyfill for strip (though trim is standard in JS)
-    if (typeof String.prototype.strip === "undefined") {
-        String.prototype.strip = function() {
-            return this.trim();
-        };
+        const a = document.createElement('a');
+        a.href = dataStr;
+        a.download = "roblox_results.json";
+        a.click();
     }
 </script>
 
